@@ -1,14 +1,23 @@
-// Import the Express module
-const express = require('express');
+const express = require('express'); // Import the Express module
+const connectDB = require('./config/db'); // Import the DB connection module
 
 // Create an Express application
 const app = express();
 
+// Connect to MongoDB database
+connectDB();
+
 // Define route handlers
 app.get('/', (req, res) => {
-	res.send('Hello, Express!');
+  res.send('Hello, Express!');
 });
 
+// Define routes
+app.use('/api/users', require('./routes/api/users'));
+app.use('/api/auth', require('./routes/api/auth'));
+app.use('/api/profile', require('./routes/api/profile'));
+app.use('/api/posts', require('./routes/api/posts'));
+
 // Start the Express server
-const PORT = process.env.PORT || 3000; // looks for open port in Heroku and port 5000 locally
+const PORT = process.env.PORT || 3000; // looks for open port in Heroku and port 3000 locally
 app.listen(PORT, () => console.log(`Server started on ${PORT}`));
