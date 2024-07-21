@@ -1,5 +1,5 @@
 {
-	"name": "dev-connector-app",
+	"name": "mern-social-app",
 	"version": "1.0.0",
 	"description": "Social network for developers",
 	"main": "server.js",
