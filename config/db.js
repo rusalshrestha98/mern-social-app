@@ -1,5 +1,5 @@
 const mongoose = require('mongoose'); // this package is the ORM for interacting with MongoDB
-const config = require('config'); // this package allows you to create global values in a central file (default.js) to be used throughout your app
+const config = require('config'); // used to create global values in a central file (default.js) to be used in your app
 
 const db = config.get('mongoURI'); // gets mongoURI from default.json file
 
