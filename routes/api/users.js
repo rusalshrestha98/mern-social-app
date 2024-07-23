@@ -3,6 +3,8 @@ const express = require('express'); // used to create and manage web servers and
 const { check, validationResult } = require('express-validator'); // middleware for validating requests
 const gravatar = require('gravatar'); // used to generate URLs based on email addresses for displaying user avatars
 const bcrypt = require('bcryptjs'); // used for hashing passwords
+const jwt = require('jsonwebtoken'); // used for generating a json web token
+const config = require('config');
 
 // import models
 const User = require('../../models/User');
@@ -62,14 +64,21 @@ router.post(
       // save the user into mongodb collection
       await user.save();
 
-      // return jsonwebtoken
-      res.send('User registered');
+      // return json web token
+      const payload = {
+        user: {
+          id: user.id, 
+        },
+      };
+
+      jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
+        if (err) throw err;
+        res.json({ token }); // paste this token into jwt.io to see the user.id payload
+      });
     } catch (err) {
       console.log('Error', err.message);
       res.status(500).send('Server error');
     }
-
-    res.send('User route');
   }
 );
 
