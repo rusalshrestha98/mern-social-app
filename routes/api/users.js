@@ -1,10 +1,10 @@
 // import packages
 const express = require('express'); // used to create and manage web servers and APIs in Node.js
-const { check, validationResult } = require('express-validator'); // middleware for validating requests
 const gravatar = require('gravatar'); // used to generate URLs based on email addresses for displaying user avatars
 const bcrypt = require('bcryptjs'); // used for hashing passwords
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify JSON Web Tokens (JWTs) for authentication
 const config = require('config'); // used to create global values in a central file (default.js) to be used in your app
+const { check, validationResult } = require('express-validator'); // middleware for validating requests
 
 // import models
 const User = require('../../models/User');
