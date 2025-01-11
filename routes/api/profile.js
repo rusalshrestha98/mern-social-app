@@ -314,6 +314,7 @@ router.delete('/education/:edu_id', auth, async (req, res) => {
 // @desc    Get user's repos from GitHub
 // @access  Public
 router.get('/github/:username', (req, res) => {
+  // Requires you to setup new OAuth app in GitHub to get client Id + secret which you put in default.json
   try {
     const options = {
       uri: `https://api.github.com/users/${
