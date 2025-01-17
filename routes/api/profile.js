@@ -1,17 +1,17 @@
-// import packages
+// Import packages
 const express = require('express');
 const request = require('request');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
 
-// import middleware
+// Import middleware
 const auth = require('../../middleware/auth');
 
-// import models
+// Import models
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 
-// create a new instance of an express router
+// Create a new instance of an express router
 const router = express.Router();
 
 // @route   GET api/profile/me
