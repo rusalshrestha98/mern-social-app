@@ -10,6 +10,7 @@ const auth = require('../../middleware/auth');
 const Posts = require('../../models/Post');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 
 // @route   POST api/posts
 // @desc    Create a post
@@ -118,6 +119,63 @@ router.delete('/:id', auth, async (req, res) => {
       return res.status(404).json({ message: 'Post not found' });
     }
 
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   PUT api/posts/like/:id
+// @desc    Like a post
+// @access  Private
+router.put('/like/:id', auth, async (req, res) => {
+  try {
+    // Get the post by ID
+    const post = await Post.findById(req.params.id);
+
+    // Check if the post has already been liked by the user (so they can't like a post infinitely)
+    if (post.likes.filter((like) => like.user.toString() === req.user.id).length > 0) {
+      return res.status(400).json({ message: 'Post already liked' });
+    }
+
+    // If the user hasn't already liked it, add it to the start of the likes array
+    post.likes.unshift({ user: req.user.id });
+
+    // Save the post
+    await post.save();
+
+    // Send response back of all post likes
+    res.json(post.likes);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   PUT api/posts/unlike/:id
+// @desc    Unlike a post
+// @access  Private
+router.put('/unlike/:id', auth, async (req, res) => {
+  try {
+    // Get the post by ID
+    const post = await Post.findById(req.params.id);
+
+    // Check if the post has not yet been liked by the user (so they can't unlike a post they never liked)
+    if (post.likes.filter((like) => like.user.toString() === req.user.id).length === 0) {
+      return res.status(400).json({ message: 'Post has not yet been liked' });
+    }
+
+    // Get the index of the like to remove from the post
+    const removeIndex = post.likes.map((like) => like.user.toString()).indexOf(req.user.id);
+
+    // Remove the like from the post
+    post.likes.splice(removeIndex, 1);
+
+    // Save the post
+    await post.save();
+
+    // Send response back of all post likes
+    res.json(post.likes);
+  } catch (error) {
+    console.log(error.message);
     res.status(500).send('Server Error');
   }
 });
